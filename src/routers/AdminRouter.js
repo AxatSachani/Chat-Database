@@ -57,18 +57,18 @@ router.post('/create/group', async (req, res) => {
     var success
     const msg = 'group created'
     const admin_id = req.body.id
-    const group = req.body.group.toLowerCase()
+    const group = req.body.group
     const group_icon = req.body.groupIcon
     try {
         const admin = await Admin.findById(admin_id)
         const groupData = { group_icon, group_name: group }
         admin.group.push(groupData)
-        const data = { user: admin.user_name, message: { userId: admin_id, username: admin.user_name, message: '', profile: '', time: Date.now() } }
+        const data = { user: admin.user_name, message: { userId: admin_id, username: admin.name, message: `welcome to ${group}`, profile: '', time: Date.now() } }
 
         var groupCheck = await Group.findOne({})
         if (groupCheck != null) {
             for (var i = 0; i < groupCheck.group.length; i++) {
-                if (groupCheck.group[i].group_name.toLowerCase() == group) {
+                if (groupCheck.group[i].group_name.toLowerCase() == group.toLowerCase()) {
                     throw new Error("Group alredy existing")
                 } else {
                     const groupdata = GroupName(group)

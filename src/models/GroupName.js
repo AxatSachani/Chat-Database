@@ -15,23 +15,18 @@ const Schema = new mongoose.Schema({
         type:Object,
         userId: {
             type: String,
-            default:''
         },
         username: {
             type: String,
-            default:''
         },
         message: {
             type: String,
-            default:''
         },
         profile: {
             type: String,
-            default:''
         },
         time: {
             type: String,
-            default:''
         }
     }]
 

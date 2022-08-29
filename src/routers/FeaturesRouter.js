@@ -6,6 +6,7 @@ const validator = require('validator')
 const User = require('../models/User')
 const crypto = require('crypto')
 require('dotenv').config()
+const {format} = require('../module/module')
 
 const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
 
@@ -32,7 +33,7 @@ router.post('/add/user', async (req, res) => {
     const msg = 'user added'
     const groupName = req.body.group
     const user_name = req.body.user_name
-    var username = req.body.username
+    var username = format(req.body.username)
     const password = crypto.randomBytes(5).toString('hex')
     try {
         //check group name is valid or not
