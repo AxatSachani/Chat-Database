@@ -7,6 +7,7 @@ const User = require('../models/User')
 const crypto = require('crypto')
 require('dotenv').config()
 const {toFormat} = require('../module/module')
+const res = require('express/lib/response')
 
 const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
 
@@ -120,6 +121,24 @@ router.post('/delete/user/', async (req, res) => {
     }
 })
 
+// clear history
+router.post('/clear/history',async (req,res)=>{
+    var success
+    const msg = 'history clear'
+    const Group = GroupName(group_name) 
+    try {
+        const data = await Group.findOne({}).select({id:0,message:1})
+        const totalMsg = data.message.length
+        data.message.splice(1,totalMsg-1)
+        await data.save()
+        const message = data.message[0]
+        success = true
+        res.send({code:400,success:success,message:msg,data:data,message:message})
+    } catch (error) {
+        success = false
+        res.send({code:400,success:success,message:error.message})
+    }
+})
 
 //delete group
 router.post('/delete/group', async (req, res) => {
