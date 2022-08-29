@@ -84,7 +84,7 @@ router.post('/add/user', async (req, res) => {
 
 
 // delete (remove) user from group
-router.post('/remove/user/', async (req, res) => {
+router.post('/delete/user/', async (req, res) => {
     var success
     const msg = 'user deleted'
     const group_name = req.body.group.toLowerCase()
