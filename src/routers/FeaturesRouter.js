@@ -7,7 +7,7 @@ const User = require('../models/User')
 const crypto = require('crypto')
 require('dotenv').config()
 
-const courier = require("@trycourier/courier").CourierClient({ authorizationToken: process.env.EMAIL_KEY});
+const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
 
 var email = function (user_name,username,groupName,password) {
     courier.send({
