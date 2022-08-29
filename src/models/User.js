@@ -63,10 +63,8 @@ UserSchema.pre('save', async function (next) {
 
 // login data check
 UserSchema.statics.findByCredentials = async function (user_name, password) {
-    console.log(user_name,password);
 
     const user = await User.findOne({ user_name })
-    console.log(user);
     if (!user) {
         throw new Error('user not found')
     } else {

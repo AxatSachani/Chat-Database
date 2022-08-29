@@ -12,7 +12,6 @@ router.post('/user/login', async (req, res) => {
     const msg = 'user login'
     const user_name = req.body.user_name
     const password = req.body.password
-    console.log(user_name, password);
     try {
         const user = await User.findByCredentials(user_name, password)
         success = true
@@ -89,12 +88,10 @@ router.post('/generate-otp', async (req, res) => {
     const user_name = req.body.user_name
     const isAdmin = req.body.isAdmin
     var success
-    console.log(typeof (isAdmin));
     try {
         var otp = Math.floor(Math.random() * (9572 - 1082)) + 1082
         if (isAdmin == 'true') {
             const admin = await Admin.findOne({ user_name })
-            console.log('admin', admin);
             if (!admin) {
                 throw new Error('invalid username')
             }

@@ -75,7 +75,7 @@ router.post('/add/user', async (req, res) => {
             await userData.save()
         }
         success = true
-        res.status(201).send({ code: 201, success: success, message: msg, pass, requestId })
+        res.status(201).send({ code: 201, success: success, message: msg, pass})
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -130,7 +130,6 @@ router.post('/delete/group', async (req, res) => {
         // delete from all Groups list    
         const groupData = await Groups.findOne({})
         for (let i = 0; i < groupData.group.length; i++) {
-            console.log('here');
             const groupCheck = groupData.group[i].group_name.toLowerCase() === group_name
             if (groupCheck) {
                 groupData.group.splice(i, 1)

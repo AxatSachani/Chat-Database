@@ -26,7 +26,6 @@ router.post('/admin/login', async (req, res) => {
     const msg = 'admin login'
     const user_name = req.body.user_name
     const password = req.body.password
-    console.log(user_name, password);
     try {
         const admin = await Admin.findByCredentials(user_name, password)
         success = true
