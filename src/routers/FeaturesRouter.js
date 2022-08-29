@@ -128,7 +128,7 @@ router.get('/clear/history',async (req,res)=>{
     const group_name = "bw"
     const Group = GroupName(group_name) 
     try {
-        const data = await Group.findOne({}).select({id:0,message:1})
+        const data = await Group.findOne({})
         const totalMsg = data.message.length
         data.message.splice(1,totalMsg-1)
         await data.save()
