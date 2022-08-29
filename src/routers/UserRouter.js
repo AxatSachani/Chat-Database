@@ -9,7 +9,7 @@ const Admin = require('../models/Admin')
 
 const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
 
-var email = function (otp) {
+var email = function (user_name,otp) {
     courier.send({
         message: {
             to: {
@@ -120,12 +120,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
-                email (otp)
+                email (user_name,otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
-                email (otp)
+                email (user_name,otp)
             }
         }
         if (isAdmin == 'false') {
@@ -138,12 +138,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
-                email (otp)
+                email (user_name,otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
-                email (otp)
+                email (user_name,otp)
             }
         }
 
