@@ -3,12 +3,8 @@ const Admin = require('../models/Admin')
 const Group = require('../models/Group')
 const { GroupName } = require('../models/GroupName')
 const router = express.Router()
-const validator = require('validator')
-const User = require('../models/User')
-const crypto = require('crypto')
 
-const { CourierClient } = require("@trycourier/courier")
-const courier = CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4" });
+const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4" });
 
 // create admin
 router.post('/admin', async (req, res) => {

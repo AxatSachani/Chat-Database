@@ -1,16 +1,30 @@
 const express = require('express')
-const Admin = require('../models/Admin')
 const Groups = require('../models/Group')
 const { GroupName } = require('../models/GroupName')
 const router = express.Router()
 const validator = require('validator')
 const User = require('../models/User')
 const crypto = require('crypto')
-const mongoose = require('mongoose')
+require('dotenv').config()
 
-const { CourierClient } = require("@trycourier/courier")
-const { log } = require('console')
-const courier = CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4" });
+const courier = require("@trycourier/courier").CourierClient({ authorizationToken: process.env.EMAIL_KEY});
+
+var email = function (user_name,username,groupName,password) {
+    courier.send({
+        message: {
+            to: {
+                email: `${user_name}`,
+            },
+            template: "KJ6D2YD8T1MY68NFG5G0SM57PBEC",
+            data: {
+                name: `${username}`,
+                group: `${groupName}`,
+                username: `${user_name}`,
+                password: `${password}`,
+            },
+        },
+    });
+}
 
 // add user in group 
 router.post('/add/user', async (req, res) => {
@@ -57,20 +71,7 @@ router.post('/add/user', async (req, res) => {
         } else {
             const userData = await User({ name: username, user_name: user_name, group: group_Data, password: password })
             var pass = `send email to '${user_name}' with ${password}`
-            var { requestId } = courier.send({
-                message: {
-                    to: {
-                        email: `${user_name}`,
-                    },
-                    template: "KJ6D2YD8T1MY68NFG5G0SM57PBEC",
-                    data: {
-                        name: `${username}`,
-                        group: `${groupName}`,
-                        username: `${user_name}`,
-                        password: `${password}`,
-                    },
-                },
-            });
+            email(user_name,username,groupName,password)
             await userData.save()
         }
         success = true
