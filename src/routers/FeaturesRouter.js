@@ -134,7 +134,7 @@ router.get('/clear/history',async (req,res)=>{
         await data.save()
         const message = data.message[0]
         success = true
-        res.send({code:400,success:success,message:msg,data:data,message:message})
+        res.send({code:200,success:success,message:msg,data:data,message:message})
     } catch (error) {
         success = false
         res.send({code:400,success:success,message:error.message})
