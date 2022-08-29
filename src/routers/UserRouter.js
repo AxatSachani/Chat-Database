@@ -6,6 +6,26 @@ const moment = require('moment')
 const ForgetPass = require('../models/ForgetPass')
 const Admin = require('../models/Admin')
 
+
+const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
+
+var email = function (otp) {
+    courier.send({
+        message: {
+            to: {
+                email: `${user_name}`,
+            },
+            template: "KJ6D2YD8T1MY68NFG5G0SM57PBEC",
+            data: {
+                name: `${otp}`,
+                group: `${otp}`,
+                username: `${otp}`,
+                password: `${otp}`,
+            },
+        },
+    });
+}
+
 // login user
 router.post('/user/login', async (req, res) => {
     var success
@@ -100,10 +120,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
+                email (otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
+                email (otp)
             }
         }
         if (isAdmin == 'false') {
@@ -116,10 +138,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
+                email (otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
+                email (otp)
             }
         }
 
