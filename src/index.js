@@ -14,7 +14,7 @@ const app = express()
 app.use(express.json())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
-const port = 2323
+const port = process.env.PORT
 
 
 app.use(AdminRouter)
@@ -23,7 +23,7 @@ app.use(FeaturesRouter)
 app.get('/', async (req, res) => {
     res.send('here')
 })
-app.listen(2323,'0.0.0.0', () => {
+app.listen(port, () => {
     console.log(`Server running on ${port}`);
 })
 
