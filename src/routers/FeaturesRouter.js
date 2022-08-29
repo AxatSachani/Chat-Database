@@ -75,7 +75,7 @@ router.post('/add/user', async (req, res) => {
             await userData.save()
         }
         success = true
-        res.status(201).send({ code: 201, success: success, message: msg, pass})
+        res.send({ code: 201, success: success, message: msg, pass})
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -112,7 +112,7 @@ router.post('/remove/user/', async (req, res) => {
             }
         }
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg })
+        res.send({ code: 200, success: success, message: msg })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -152,7 +152,7 @@ router.post('/delete/group', async (req, res) => {
         }
         Group.drop
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg })
+        res.send({ code: 200, success: success, message: msg })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -188,7 +188,7 @@ router.post('/group/user', async (req, res) => {
             msg = "Group Users not found."
         }
 
-        res.status(200).send({ code: 200, success: success, message: msg, data: userData })
+        res.send({ code: 200, success: success, message: msg, data: userData })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })

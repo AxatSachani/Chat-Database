@@ -9,18 +9,17 @@ const Admin = require('../models/Admin')
 
 const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
 
-var email = function (user_name,otp) {
+var email = function (user_name,username,otp) {
     courier.send({
         message: {
             to: {
                 email: `${user_name}`,
             },
-            template: "KJ6D2YD8T1MY68NFG5G0SM57PBEC",
+            template: "Q77MRX6Y764GYNM3NQMGFA088VET",
             data: {
-                name: `${otp}`,
-                group: `${otp}`,
-                username: `${otp}`,
-                password: `${otp}`,
+                name: `${username}`,
+                user: `${user_name}`,
+                otp: `${otp}`,
             },
         },
     });
@@ -35,7 +34,7 @@ router.post('/user/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(user_name, password)
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg, data: user })
+        res.send({ code: 200, success: success, message: msg, data: user })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -56,7 +55,7 @@ router.post('/message', async (req, res) => {
         groupData.message.push(data)
         await groupData.save()
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg, data: groupData.message })
+        re.send({ code: 200, success: success, message: msg, data: groupData.message })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -75,7 +74,7 @@ router.post('/user/group', async (req, res) => {
             throw new Error('invalid user name')
         }
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg, data: { group: user.group } })
+        res.send({ code: 200, success: success, message: msg, data: { group: user.group } })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -120,12 +119,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
-                email (user_name,otp)
+                email (user_name,admin.name,otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
-                email (user_name,otp)
+                email (user_name,admin.name,otp)
             }
         }
         if (isAdmin == 'false') {
@@ -138,12 +137,12 @@ router.post('/generate-otp', async (req, res) => {
                 const createAt = Date.now()
                 const expirAt = Date.now() + 120000
                 await ForgetPass.findOneAndUpdate({ user_name }, { otp, createAt, expirAt })
-                email (user_name,otp)
+                email (user_name,user.name,otp)
             }
             else {
                 const data = { user_name, otp }
                 await ForgetPass(data).save()
-                email (user_name,otp)
+                email (user_name,user.name,otp)
             }
         }
 
@@ -153,7 +152,7 @@ router.post('/generate-otp', async (req, res) => {
         // }, 20000);
 
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg, data: otp })
+        res.send({ code: 200, success: success, message: msg, data: otp })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -192,10 +191,10 @@ router.post('/forget-password', async (req, res) => {
             await ForgetPass.findOneAndDelete({ user_name })
         }
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg })
+        res.send({ code: 200, success: success, message: msg })
     } catch (error) {
         success = false
-        res.status(400).send({ code: 400, success: success, message: error.message })
+        res.send({ code: 400, success: success, message: error.message })
     }
 })
 

@@ -13,7 +13,7 @@ router.post('/admin', async (req, res) => {
     try {
         const admin = await Admin(req.body)
         await admin.save()
-        res.status(201).send({ code: 201, success: success, message: msg, data: admin })
+        res.send({ code: 201, success: success, message: msg, data: admin })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -29,7 +29,7 @@ router.post('/admin/login', async (req, res) => {
     try {
         const admin = await Admin.findByCredentials(user_name, password)
         success = true
-        res.status(200).send({ code: 200, success: success, message: msg, data: admin })
+        res.send({ code: 200, success: success, message: msg, data: admin })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -57,20 +57,22 @@ router.post('/create/group', async (req, res) => {
     var success
     const msg = 'group created'
     const admin_id = req.body.id
-    const group = req.body.group
+    const group = req.body.group.toLowerCase()
     const group_icon = req.body.groupIcon
     try {
         const admin = await Admin.findById(admin_id)
         const groupData = { group_icon, group_name: group }
         admin.group.push(groupData)
+        const data = { user: admin.user_name, message: { userId: admin_id, username: admin.user_name, message: '', profile: '', time: Date.now() } }
 
         var groupCheck = await Group.findOne({})
         if (groupCheck != null) {
             for (var i = 0; i < groupCheck.group.length; i++) {
-                if (groupCheck.group[i].group_name == group) {
+                if (groupCheck.group[i].group_name.toLowerCase() == group) {
                     throw new Error("Group alredy existing")
                 } else {
-                    GroupName(group)
+                    const groupdata = GroupName(group)
+                    await groupdata(data).save()
                     groupCheck.group.push(groupData)
                     await groupCheck.save()
                     await admin.save()
@@ -78,13 +80,13 @@ router.post('/create/group', async (req, res) => {
                 }
             }
         } else {
-            GroupName(group)
+            const groupdata = GroupName(group)
+            await groupdata(data).save()
             await Group({ group: groupData }).save()
             await admin.save()
         }
-
         success = true
-        res.status(201).send({ code: 201, success: success, message: msg })
+        res.send({ code: 201, success: success, message: msg })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
