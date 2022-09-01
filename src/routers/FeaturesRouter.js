@@ -132,9 +132,9 @@ router.post('/clear/history',async (req,res)=>{
         const totalMsg = data.message.length
         data.message.splice(1,totalMsg-1)
         await data.save()
-        const message = data.message[0]
+        const message = data.message
         success = true
-        res.send({code:200,success:success,message:msg,data:message})
+        res.send({code:200,success:success,message:message})
     } catch (error) {
         success = false
         res.send({code:400,success:success,message:error.message})
