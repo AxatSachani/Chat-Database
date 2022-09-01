@@ -125,7 +125,7 @@ router.post('/delete/user/', async (req, res) => {
 router.get('/clear/history',async (req,res)=>{
     var success
     const msg = 'history clear'
-    const group_name = "bw"
+    const group_name = req.body.group
     const Group = GroupName(group_name) 
     try {
         const data = await Group.findOne({})
