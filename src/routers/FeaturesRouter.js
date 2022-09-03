@@ -174,7 +174,7 @@ router.post('/delete/group', async (req, res) => {
         }
 
         // delete from Admin table
-        const adminData = await Admin.findOne()
+        const adminData = await Admin.findOne({})
         for (let i = 0; i < adminData.group.length; i++) {
             const groupCheck = adminData.group[i].toLowerCase() === group_name
             if (groupCheck) {
