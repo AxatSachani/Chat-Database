@@ -6,12 +6,13 @@ const validator = require('validator')
 const User = require('../models/User')
 const crypto = require('crypto')
 require('dotenv').config()
-const {toFormat} = require('../module/module')
+const { toFormat } = require('../module/module')
 const res = require('express/lib/response')
+const { Admin } = require('mongodb')
 
-const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4"});
+const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4" });
 
-var email = function (user_name,username,groupName,password) {
+var email = function (user_name, username, groupName, password) {
     courier.send({
         message: {
             to: {
@@ -32,7 +33,7 @@ var email = function (user_name,username,groupName,password) {
 router.post('/add/user', async (req, res) => {
     var success
     const msg = 'user added'
-    const groupName = req.body.group
+    const groupName = req.body.group.toLowerCase()
     const user_name = req.body.user_name
     var username = toFormat(req.body.username)
     const password = crypto.randomBytes(5).toString('hex')
@@ -45,7 +46,7 @@ router.post('/add/user', async (req, res) => {
         const groupCheck = await Groups.findOne({})
         var groupExisting = false
         for (var i = 0; i < groupCheck.group.length; i++) {
-            if (groupCheck.group[i].group_name == groupName) {
+            if (groupCheck.group[i].group_name.toLowerCase() == groupName) {
                 groupExisting = true
                 var group_Data = groupCheck.group[i]
             }
@@ -68,16 +69,17 @@ router.post('/add/user', async (req, res) => {
         // insert data in whole user tables
         const userCheck = await User.findOne({ user_name })
         if (userCheck != null) {
+            userCheck.name = username
             userCheck.group.push(group_Data)
             await userCheck.save()
         } else {
             const userData = await User({ name: username, user_name: user_name, group: group_Data, password: password })
             var pass = `send email to '${user_name}' with ${password}`
-            email(user_name,username,groupName,password)
+            email(user_name, username, groupName, password)
             await userData.save()
         }
         success = true
-        res.send({ code: 201, success: success, message: msg, pass})
+        res.send({ code: 201, success: success, message: msg, pass })
     } catch (error) {
         success = false
         res.send({ code: 400, success: success, message: error.message })
@@ -122,22 +124,22 @@ router.post('/delete/user/', async (req, res) => {
 })
 
 // clear history
-router.post('/clear/history',async (req,res)=>{
+router.post('/clear/history', async (req, res) => {
     var success
     const msg = 'history clear'
     const group_name = req.body.group
-    const Group = GroupName(group_name) 
+    const Group = GroupName(group_name)
     try {
         const data = await Group.findOne({})
         const totalMsg = data.message.length
-        data.message.splice(1,totalMsg-1)
+        data.message.splice(1, totalMsg - 1)
         await data.save()
         const message = data.message
         success = true
-        res.send({code:200,success:success,message:message})
+        res.send({ code: 200, success: success, message: message })
     } catch (error) {
         success = false
-        res.send({code:400,success:success,message:error.message})
+        res.send({ code: 400, success: success, message: error.message })
     }
 })
 
@@ -167,9 +169,20 @@ router.post('/delete/group', async (req, res) => {
                 if (groupCheck) {
                     userData[i].group.splice(j, 1)
                     await userData[i].save()
-                    break;
                 }
             }
+        }
+
+        // delete from Admin table
+        const adminData = await Admin.findOne()
+        for (let i = 0; i < adminData.group.length; i++) {
+            const groupCheck = adminData.group[i].toLowerCase() === group_name
+            if (groupCheck) {
+                adminData.group.splice(i, 1)
+                await adminData.save()
+                break;
+            }
+
         }
         Group.drop
         success = true
@@ -181,7 +194,7 @@ router.post('/delete/group', async (req, res) => {
 })
 
 
-//user list in particuler group
+//users list in particuler group
 router.post('/group/user', async (req, res) => {
     var success
     var msg = 'user list'
