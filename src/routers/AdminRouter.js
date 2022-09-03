@@ -67,10 +67,14 @@ router.post('/create/group', async (req, res) => {
 
         var groupCheck = await Group.findOne({})
         if (groupCheck != null) {
+            console.log('in not null');
             for (var i = 0; i < groupCheck.group.length; i++) {
-                if (groupCheck.group[i].group_name.toLowerCase() === group.toLowerCase()) {
+                const check= groupCheck.group[i].group_name.toLowerCase() === group.toLowerCase()
+                if (check) {
+                    console.log('in existing');
                     throw new Error("Group alredy existing")
                 } else {
+                    console.log('out existing not null');
                     const groupdata = GroupName(group)
                     await groupdata(data).save()
                     groupCheck.group.push(groupData)
@@ -80,6 +84,7 @@ router.post('/create/group', async (req, res) => {
                 }
             }
         } else {
+            console.log('new');
             const groupdata = GroupName(group)
             await groupdata(data).save()
             await Group({ group: groupData }).save()
