@@ -4,7 +4,7 @@ const database = 'chat-cloud'
 const url = `mongodb+srv://akshat:admin123@chat-server.akji0.mongodb.net/${database}?retryWrites=true&w=majority`
 
 var connect = false
-const i = mongoose.connect(url, {
+ mongoose.connect(url, {
     useNewUrlParser: true
 }, (err) => {
     if (err) {
@@ -13,7 +13,6 @@ const i = mongoose.connect(url, {
     connect = true
     console.log(`'${database}' connected`);
 })
-console.log(i);
 setTimeout(() => {
     if (!connect) {
         console.log(chalk.red('Error:'),(chalk.yellow('database not connected')));
