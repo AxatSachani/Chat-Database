@@ -68,7 +68,7 @@ router.post('/create/group', async (req, res) => {
         var groupCheck = await Group.findOne({})
         if (groupCheck != null) {
             for (var i = 0; i < groupCheck.group.length; i++) {
-                if (groupCheck.group[i].group_name.toLowerCase() == group.toLowerCase()) {
+                if (groupCheck.group[i].group_name.toLowerCase() === group.toLowerCase()) {
                     throw new Error("Group alredy existing")
                 } else {
                     const groupdata = GroupName(group)
