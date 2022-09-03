@@ -7,8 +7,9 @@ const User = require('../models/User')
 const crypto = require('crypto')
 require('dotenv').config()
 const { toFormat } = require('../module/module')
-const res = require('express/lib/response')
-const { Admin } = require('mongodb')
+const Admin = require('../models/Admin')
+
+require("../database/database")
 
 const courier = require("@trycourier/courier").CourierClient({ authorizationToken: "pk_prod_F4TFS1C8TX47Q5NWXQP7J73RQWZ4" });
 
@@ -184,7 +185,7 @@ router.post('/delete/group', async (req, res) => {
             }
 
         }
-        Group.drop
+        Group.drop()
         success = true
         res.send({ code: 200, success: success, message: msg })
     } catch (error) {
