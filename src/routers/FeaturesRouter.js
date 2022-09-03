@@ -9,6 +9,7 @@ require('dotenv').config()
 const { toFormat } = require('../module/module')
 const Admin = require('../models/Admin')
 const { default: mongoose } = require('mongoose')
+const Group = require('../models/Group')
 
 require("../database/database")
 
@@ -185,7 +186,7 @@ router.post('/delete/group', async (req, res) => {
                 break;
             }
         }
-        mongoose.connection.deleteModel(group_name)
+        mongoose.connection.dropCollection(Group)
         success = true
         res.send({ code: 200, success: success, message: msg })
     } catch (error) {
