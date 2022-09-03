@@ -150,7 +150,7 @@ router.post('/delete/group', async (req, res) => {
     var success
     const msg = 'group deleted'
     const group_name = req.body.group
-    const Group = GroupName(group_name)
+    // const Group = GroupName(group_name)
     try {
         // delete from all Groups list    
         const groupData = await Groups.findOne({})
@@ -178,13 +178,12 @@ router.post('/delete/group', async (req, res) => {
         // delete from Admin table
         const adminData = await Admin.findOne({})
         for (let i = 0; i < adminData.group.length; i++) {
-            const groupCheck = adminData.group[i] == group_name
+            const groupCheck = adminData.group[i].group_name == group_name
             if (groupCheck) {
                 adminData.group.splice(i, 1)
                 await adminData.save()
                 break;
             }
-
         }
         await mongoose.connection.dropCollection(group_name)
         // mongoose.deleteModel(group_name)
