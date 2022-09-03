@@ -185,7 +185,8 @@ router.post('/delete/group', async (req, res) => {
                 break;
             }
         }
-        await mongoose.connection.dropCollection(group_name)
+       const n =   mongoose.connection.collection(group_name)
+       await n.drop()
         // mongoose.deleteModel(group_name)
         success = true
         res.send({ code: 200, success: success, message: msg })
