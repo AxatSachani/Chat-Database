@@ -148,13 +148,13 @@ router.post('/clear/history', async (req, res) => {
 router.post('/delete/group', async (req, res) => {
     var success
     const msg = 'group deleted'
-    const group_name = req.body.group.toLowerCase()
+    const group_name = req.body.group
     const Group = GroupName(group_name)
     try {
         // delete from all Groups list    
         const groupData = await Groups.findOne({})
         for (let i = 0; i < groupData.group.length; i++) {
-            const groupCheck = groupData.group[i].group_name.toLowerCase() === group_name
+            const groupCheck = groupData.group[i].group_name == group_name
             if (groupCheck) {
                 groupData.group.splice(i, 1)
                 await groupData.save()
@@ -166,7 +166,7 @@ router.post('/delete/group', async (req, res) => {
         const userData = await User.find({})
         for (let i = 0; i < userData.length; i++) {
             for (let j = 0; j < userData[i].group.length; j++) {
-                const groupCheck = userData[i].group[j].group_name.toLowerCase() === group_name
+                const groupCheck = userData[i].group[j].group_name == group_name
                 if (groupCheck) {
                     userData[i].group.splice(j, 1)
                     await userData[i].save()
@@ -177,7 +177,7 @@ router.post('/delete/group', async (req, res) => {
         // delete from Admin table
         const adminData = await Admin.findOne({})
         for (let i = 0; i < adminData.group.length; i++) {
-            const groupCheck = adminData.group[i].toLowerCase() === group_name
+            const groupCheck = adminData.group[i] == group_name
             if (groupCheck) {
                 adminData.group.splice(i, 1)
                 await adminData.save()
