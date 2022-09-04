@@ -73,6 +73,9 @@ router.post('/user/group', async (req, res) => {
         if (!user) {
             throw new Error('invalid user name')
         }
+        if (user.group.length == 0) {
+            throw new Error('group not found')
+        }
         success = true
         res.send({ code: 200, success: success, message: msg, data: { group: user.group } })
     } catch (error) {
