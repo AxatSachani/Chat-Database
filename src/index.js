@@ -27,6 +27,8 @@ app.listen(port, () => {
     console.log(`Server running on ${port}`);
 })
 
+app.get('/',async(req,res)=>{
+res.send({connect:true})}
 
 
 // http://192.168.1.7:3030/admin/login
