@@ -23,7 +23,7 @@ app.use(FeaturesRouter)
 app.get('/', async (req, res) => {
     res.send('here')
 })
-app.listen(port, () => {
+app.listen('8080', () => {
     console.log(`Server running on ${port}`);
 })
 
