@@ -28,7 +28,8 @@ app.listen(port, () => {
 })
 
 app.get('/',async(req,res)=>{
-res.send({connect:true})}
+res.send({connect:true})
+})
 
 
 // http://192.168.1.7:3030/admin/login
