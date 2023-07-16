@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const validator = require('validator')
 const bcrypt = require('bcrypt')
 
 const UserSchema = new mongoose.Schema({
@@ -39,6 +38,11 @@ const UserSchema = new mongoose.Schema({
         default: Math.floor(Math.random() * (7)) + 1
 
     }
+}, {
+    collation: {
+        locale: 'en',
+        strength: 2
+    }
 })
 
 
@@ -56,7 +60,7 @@ UserSchema.methods.toJSON = function () {
 UserSchema.pre('save', async function (next) {
     const user = this
     if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 12)
+        user.password =await bcrypt.hash(user.password, 12)
     }
     next()
 })

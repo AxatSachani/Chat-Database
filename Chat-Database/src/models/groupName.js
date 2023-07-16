@@ -1,18 +1,13 @@
-const { ObjectId } = require("mongodb");
 const mongoose = require("mongoose");
-const moment = require('moment')
-const validator = require('validator')
-
 
 const Schema = new mongoose.Schema({
-
     user: [{
         type: String,
         required: true,
         trim: true
     }],
     message: [{
-        type:Object,
+        type: Object,
         userId: {
             type: String,
         },
@@ -29,9 +24,12 @@ const Schema = new mongoose.Schema({
             type: String,
         }
     }]
-
+}, {
+    collation: {
+        locale: 'en',
+        strength: 2
+    }
 })
-
 
 // filter response data
 Schema.methods.toJSON = function () {

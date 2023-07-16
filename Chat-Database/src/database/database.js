@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const chalk = require('chalk')
 const database = 'chat-cloud'
-const url = `mongodb+srv://akshat:admin123@chat-server.akji0.mongodb.net/${database}?retryWrites=true&w=majority`
+const url = `mongodb+srv://akshat:zDbVkw4HaUfn1nJw@chat-server.akji0.mongodb.net/${database}?retryWrites=true&w=majority`
 
 var connect = false
- mongoose.connect(url, {
+mongoose.connect(url, {
     useNewUrlParser: true
 }, (err) => {
     if (err) {
@@ -15,6 +15,7 @@ var connect = false
 })
 setTimeout(() => {
     if (!connect) {
-        console.log(chalk.red('Error:'),(chalk.yellow('database not connected')));
+        console.log(chalk.red('Error:'), (chalk.yellow('database not connected')));
     }
 }, 5000);
+

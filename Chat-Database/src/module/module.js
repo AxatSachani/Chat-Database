@@ -1,6 +1,4 @@
-var toFormat = function (name) {
-
-
+const toFormat = function (name) {
     for (let i = 0; i < name.length; i++) {
         if (name.length == 0) {
             return
@@ -19,6 +17,19 @@ var toFormat = function (name) {
     return type
 }
 
+const generateMessage = (id, username, room, message, isAdmin, createAt, profile = "") => { // data => id(userId), username, room, text
+    return {
+        id,
+        username,
+        room,
+        message,
+        isAdmin,
+        createAt,
+        profile
+    }
+}
+
 module.exports = {
-    toFormat
+    toFormat,
+    generateMessage
 }

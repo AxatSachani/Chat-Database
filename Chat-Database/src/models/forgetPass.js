@@ -16,10 +16,15 @@ const ForgetPassSchema = new mongoose.Schema({
     },
     expirAt: {
         type: String,
-        default:Date.now() + 120000
+        default: Date.now() + 120000
+    }
+}, {
+    collation: {
+        locale: 'en',
+        strength: 2
     }
 })
 
-const ForgetPass = mongoose.model('ForgetPass', ForgetPassSchema)
+const ForgetPass = mongoose.model('forgetPass', ForgetPassSchema)
 
 module.exports = ForgetPass

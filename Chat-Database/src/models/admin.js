@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt')
 
 
 const AdminSchema = new mongoose.Schema({
-
     name: {
         type: String,
         require: true,
@@ -43,6 +42,11 @@ const AdminSchema = new mongoose.Schema({
             }
         }
     },
+}, {
+    collation: {
+        locale: 'en',
+        strength: 2
+    }
 })
 
 // filter response data
